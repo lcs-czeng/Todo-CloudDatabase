@@ -6,7 +6,7 @@
 //
 
 import Foundation
- 
+
 @Observable
 class TodoListViewModel {
     
@@ -17,9 +17,30 @@ class TodoListViewModel {
     // MARK: Initializer(s)
     init(todos: [TodoItem] = []) {
         self.todos = todos
+        Task {
+            try await getTodos()
+        }
     }
     
     // MARK: Functions
+    
+    func getTodos() async throws {
+        
+        do {
+            let results: [TodoItem] = try await supabase
+                .from("todos")
+                .select()
+                .execute()
+                .value
+            
+            self.todos = results
+            
+        } catch {
+            debugPrint(error)
+        }
+        
+    }
+    
     func createToDo(withTitle title: String) {
         
         // Create the new to-do item instance
