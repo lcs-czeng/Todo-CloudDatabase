@@ -8,7 +8,7 @@
 import Foundation
 
 struct TodoItem: Identifiable, Codable {
-    var id = Int?
+    var id: Int?
     var title: String
     var done:  Bool
 }
